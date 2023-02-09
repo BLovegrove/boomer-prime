@@ -5,6 +5,9 @@ name = "pypi"
 
 [packages]
 "discord.py" = "*"
+pynacl = "*"
+lavalink = "*"
+stringprogressbar = "*"
 
 [dev-packages]
 
