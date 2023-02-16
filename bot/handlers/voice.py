@@ -10,7 +10,7 @@ class VoiceHandler:
     def __init__(self, bot: models.LavaBot) -> None:
         self.bot = bot
 
-    def fetchPlayer(self, bot: models.LavaBot) -> lavalink.DefaultPlayer:
+    def fetch_player(self, bot: models.LavaBot) -> lavalink.DefaultPlayer:
         return bot.lavalink.player_manager.get(cfg.guild.id)
 
     async def ensure_voice(self, interaction: discord.Interaction):

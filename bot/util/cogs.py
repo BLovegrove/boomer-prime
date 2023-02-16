@@ -1,14 +1,15 @@
-from discord.ext import commands
 import os
+
+from discord.ext import commands
 
 
 def search() -> list[str]:
 
-    list = []
+    events_list = []
 
     for folder in os.listdir(f"bot/cogs/."):
         for filename in os.listdir(f"bot/cogs/{folder}/."):
             if filename.endswith(".py"):
-                list.append(f"bot.cogs.{folder}.{filename[:-3]}")
+                events_list.append(f"bot.cogs.{folder}.{filename[:-3]}")
 
-    return list
+    return events_list

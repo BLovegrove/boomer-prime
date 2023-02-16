@@ -18,27 +18,18 @@ class LavaBot(commands.Bot):
             command_prefix=commands.when_mentioned, intents=discord.Intents.all()
         )
         self.cogList = helper.cogs.search()
-        self.lavalink = lavalink.Client(self.user.id)
+        self.lavalink = None
         self.logger = helper.logs.getLogger()
         self.player_exists = False
+
+    def update_lavalink(self):
+        self.lavalink = lavalink.Client(self.user.id)
 
     # Cog loading
     async def setup_hook(self) -> None:
         for extension in self.cogList:
             await self.load_extension(extension)
         return await super().setup_hook()
-
-    # On-ready for command syncing, bootup messages, etc.
-    async def on_ready(self):
-        self.logger.info(f"Bot is logged in as {self.user}")
-        self.logger.info("Syncing slash commands...")
-        try:
-            guild_obj = discord.Object(id=cfg.guild.id)
-            self.tree.copy_global_to(guild=guild_obj)
-            synced = await self.tree.sync(guild=guild_obj)
-            self.logger.info(f"Synced {len(synced)} commands.")
-        except Exception as e:
-            self.logger.error(e)
 
 
 class LavalinkVoiceClient(discord.VoiceClient):
