@@ -6,12 +6,11 @@ import config as cfg
 
 from ...handlers.music import MusicHandler
 from ...handlers.voice import VoiceHandler
-from ...util import models
 from ...util.models import LavaBot
 
 
 class Play(commands.Cog):
-    def __init__(self, bot: models.LavaBot) -> None:
+    def __init__(self, bot: LavaBot) -> None:
         self.bot = bot
         self.music_handler = MusicHandler(bot)
         self.voice_handler = VoiceHandler(bot)

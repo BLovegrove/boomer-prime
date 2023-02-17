@@ -1,10 +1,12 @@
+import traceback
+
 import discord
 from discord.ext import commands
 
 import config as cfg
 
-from ...util.models import LavaBot
 from ...handlers.voice import VoiceHandler
+from ...util.models import LavaBot
 
 
 class Ready(commands.Cog):
@@ -25,6 +27,11 @@ class Ready(commands.Cog):
             await self.voice_handler.update_status(self.bot)
         except Exception as e:
             self.bot.logger.error(e)
+            stacktrace = traceback.extract_stack(e.__traceback__.tb_frame)
+            self.bot.logger.warn(
+                f'{type(e).__name__} while syncing slash commands in ("{stacktrace[-1].filename}", line {stacktrace[-1].lineno})'
+            )
+            return
 
 
 async def setup(bot: LavaBot):

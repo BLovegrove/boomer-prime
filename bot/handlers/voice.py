@@ -1,3 +1,6 @@
+import sys
+import traceback
+
 import discord
 import lavalink
 
@@ -15,7 +18,10 @@ class VoiceHandler:
             player = bot.lavalink.player_manager.get(cfg.guild.id)
             return player
         except Exception as e:
-            self.bot.logger.warn("Failed to fetch player")
+            stacktrace = traceback.extract_stack(e.__traceback__.tb_frame)
+            self.bot.logger.warn(
+                f'{type(e).__name__} while fetching player in ("{stacktrace[-1].filename}", line {stacktrace[-1].lineno}) Caused by ("{stacktrace[-2].filename}", line {stacktrace[-2].lineno})'
+            )
             return
 
     async def ensure_voice(self, interaction: discord.Interaction):

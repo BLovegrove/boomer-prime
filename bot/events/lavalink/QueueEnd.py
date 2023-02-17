@@ -1,3 +1,5 @@
+import traceback
+
 import discord
 import lavalink
 from discord.ext import commands
@@ -36,8 +38,8 @@ class QueueEnd(commands.Cog):
             await self.voice_handler.disconnect(self.bot, player)
 
             if not player.channel_id:
-                self.bot.logger.error(
-                    "Couldn't find a text channel when queuing idle track."
+                self.bot.logger.warn(
+                    f"Failed to find text channel while queuing idle track."
                 )
                 return
 
