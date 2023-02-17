@@ -36,7 +36,7 @@ class TrackEmbedBuilder:
 
         # update title based on idle status
         if not player.current or player.fetch("idle"):
-            self.embed.title = f"Now palying: {track.title}"
+            self.embed.title = f"Now playing: {track.title}"
 
         else:
             self.embed.title = track.title
@@ -83,7 +83,7 @@ class SkipEmbedBuilder(TrackEmbedBuilder):
             url=self.embed.author.url,
             icon_url=self.embed.author.icon_url,
         )
-        self.embed.title = f"Now palying: {track.title}"
+        self.embed.title = f"Now playing: {track.title}"
         self.embed.set_footer(
             text=f"{max(0, len(player.queue) - 1)} tracks left in queue."
         )
