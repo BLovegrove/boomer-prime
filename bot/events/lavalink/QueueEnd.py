@@ -4,30 +4,61 @@ from discord.ext import commands
 
 import config as cfg
 
+from ...handlers.database import DBHandler
 from ...handlers.voice import VoiceHandler
 from ...util.models import LavaBot
 
 
 class QueueEnd(commands.Cog):
     def __init__(self, bot: LavaBot) -> None:
-        super().__init__(bot)
-
         self.bot = bot
         self.voice_handler = VoiceHandler(bot)
-        self.player = self.voice_handler.fetch_player(bot)
-        if not self.player:
+        self.DatabaseHandler = DBHandler(bot)
+
+    @lavalink.listener(lavalink.events.QueueEndEvent)
+    async def on_queue_end(self, event: lavalink.events.QueueEndEvent):
+        # TODO: Followup on issue report so theres no need to manually type player.node
+        player = self.voice_handler.fetch_player(self.bot)
+        if not player:
             return
+        await player.set_volume(cfg.player.volume_idle)
+        player.node: lavalink.Node = player.node
+        result: lavalink.LoadResult = await player.node.get_tracks(
+            self.DatabaseHandler.fetch_bgm(player.fetch("summoner_id"))
+        )
 
-        self.bot.lavalink.add_event_hook()
+        if (
+            not result
+            or not result.tracks
+            or result.load_type != result.load_type.TRACK
+        ):
+            player.queue.clear()
+            await self.voice_handler.disconnect(self.bot, player)
 
-    async def track_hook(self, event):
-        if isinstance(event, lavalink.events.QueueEndEvent):
-            await self.player.set_volume(cfg.player.volume_idle)
+            if not player.channel_id:
+                self.bot.logger.error(
+                    "Couldn't find a text channel when queuing idle track."
+                )
+                return
 
-            # TODO: Followup on issue report so theres no need to manually type player.node
-            self.player.node: lavalink.Node = self.player.node
-            # TODO: Add database support for idle tracks
-            result: lavalink.LoadResult = await self.player.node.get_tracks()
+            channel = self.bot.get_channel(player.channel_id)
+            channel.send(
+                ":warning: Nothing found when looking for idle music! Look for a new video."
+            )
+
+        if player.fetch("idle"):
+            player.set_loop(player.LOOP_NONE)
+            player.queue.clear()
+            await player.skip()
+
+        track = result.tracks[0]
+        player.queue.append(track, 0)
+
+        player.store("idle", True)
+        player.set_loop(player.LOOP_SINGLE)
+
+        if not player.is_playing:
+            await player.play()
 
 
 async def setup(bot: LavaBot):

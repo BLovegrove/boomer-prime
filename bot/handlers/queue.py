@@ -17,9 +17,7 @@ class QueueHandler:
         self.voice_handler = voice_handler
 
     def update_pages(self, player: lavalink.DefaultPlayer):
-        player.store(
-            "pages", math.ceil(len(player.queue) / cfg.player.list_page_length)
-        )
+        player.store("pages", math.ceil(len(player.queue) / cfg.player.list_len))
 
     async def clear(self, interaction: discord.Interaction, index: int = None):
         player = await self.voice_handler.ensure_voice(interaction)

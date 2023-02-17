@@ -34,7 +34,6 @@ logger = helper.logs.getLogger()
 def main():
     bot = models.LavaBot()
     bot.run(cfg.bot.token)
-    bot.update_lavalink()
 
 
 if __name__ == "__main__":

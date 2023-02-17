@@ -17,18 +17,31 @@ class LavaBot(commands.Bot):
         super().__init__(
             command_prefix=commands.when_mentioned, intents=discord.Intents.all()
         )
-        self.cogList = helper.cogs.search()
+        self.cog_list = helper.cogs.search()
+        self.event_list = helper.events.search()
         self.lavalink = None
         self.logger = helper.logs.getLogger()
         self.player_exists = False
 
     def update_lavalink(self):
         self.lavalink = lavalink.Client(self.user.id)
+        self.lavalink.add_node(
+            cfg.lavalink.host,
+            cfg.lavalink.port,
+            cfg.lavalink.password,
+            cfg.lavalink.region,
+        )
+        self.logger.info(f"Created lavalink Client: {self.lavalink}")
+        for cog in self.cogs.values():
+            self.lavalink.add_event_hooks(cog)
 
     # Cog loading
     async def setup_hook(self) -> None:
-        for extension in self.cogList:
-            await self.load_extension(extension)
+        for cog in self.cog_list:
+            await self.load_extension(cog)
+        for event in self.event_list:
+            await self.load_extension(event)
+
         return await super().setup_hook()
 
 

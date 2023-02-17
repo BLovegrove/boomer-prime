@@ -28,11 +28,11 @@ class TrackEmbedBuilder:
         # update thumbnail based on deferred status
         if isinstance(track, lavalink.AudioTrack):
             self.embed.set_thumbnail(
-                f"https://i.ytimg.com/vi/{track.identifier}/mqdefault.jpg"
+                url=f"https://i.ytimg.com/vi/{track.identifier}/mqdefault.jpg"
             )
 
         else:
-            self.embed.set_thumbnail("https://i.imgur.com/hpjK2ym.png")
+            self.embed.set_thumbnail(url="https://i.imgur.com/hpjK2ym.png")
 
         # update title based on idle status
         if not player.current or player.fetch("idle"):

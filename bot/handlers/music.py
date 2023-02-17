@@ -46,10 +46,12 @@ class MusicHandler:
             await player.set_volume(cfg.player.volume_default)
             await player.play()
 
-        await interaction.response.edit_message(embed=embed)
+        await interaction.followup.send(embed=embed)
 
     async def play(self, interaction: discord.Interaction, search: str):
-        player = await self.voice_handler.ensure_voice(interaction)
+        player: lavalink.DefaultPlayer = await self.voice_handler.ensure_voice(
+            interaction
+        )
         if not player:
             return
 
@@ -57,28 +59,27 @@ class MusicHandler:
 
         await interaction.response.defer()
 
-        # TODO: Followup on issue report so theres no need to manually type player.node
         player.node: lavalink.Node = player.node
-        result: lavalink.LoadResult = await player.node.get_tracks(search)
+        result: lavalink.LoadResult = await player.node.get_tracks(f"ytsearch:{search}")
 
         try:
 
             match result.load_type:
-                case "LOAD_FAILED":
+                case lavalink.LoadType.LOAD_FAILED:
                     await interaction.response.edit_message(
                         content="Failed to load track, please use a different URL or different search term."
                     )
 
-                case "NO_MATCHES":
+                case lavalink.LoadType.NO_MATCHES:
                     await interaction.response.edit_message(
                         content="404 song not found! Try something else."
                     )
 
-                case "SEARCH_RESULT" | "TRACK_LOADED":
+                case lavalink.LoadType.SEARCH | lavalink.LoadType.TRACK:
                     track = result.tracks[0]
                     await self.__add_track(interaction, player, track)
 
-                case "PLAYLIST_LOADED":
+                case lavalink.LoadType.PLAYLIST:
                     tracks = result.tracks
                     await self.__add_track(interaction, player, None, tracks, result)
 
@@ -96,6 +97,7 @@ class MusicHandler:
             return
 
         self.queue_handler.update_pages(player)
+        await self.voice_handler.update_status(self.bot, player)
 
         return
 

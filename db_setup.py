@@ -12,7 +12,7 @@ cursor.execute(
 
 cursor.execute(
     """CREATE TABLE favs (
-        guild_role_id TEXT,
+        role_id TEXT,
         list_data TEXT
     )"""
 )

@@ -4,15 +4,17 @@ from discord.ext import commands
 import config as cfg
 
 from ...util.models import LavaBot
+from ...handlers.voice import VoiceHandler
 
 
 class Ready(commands.Cog):
     def __init__(self, bot: LavaBot) -> None:
-        super().__init__(bot)
         self.bot = bot
+        self.voice_handler = VoiceHandler(bot)
 
     @commands.Cog.listener()
     async def on_ready(self):
+        self.bot.update_lavalink()
         self.bot.logger.info(f"Bot is logged in as {self.bot.user}")
         self.bot.logger.info("Syncing slash commands...")
         try:
@@ -20,6 +22,7 @@ class Ready(commands.Cog):
             self.bot.tree.copy_global_to(guild=guild_obj)
             synced = await self.bot.tree.sync(guild=guild_obj)
             self.bot.logger.info(f"Synced {len(synced)} commands.")
+            await self.voice_handler.update_status(self.bot)
         except Exception as e:
             self.bot.logger.error(e)
 

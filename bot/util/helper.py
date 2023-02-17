@@ -1,3 +1,1 @@
-from . import cogs
-from . import logs
-from . import DictStrTranscoder 
+from . import cogs, events, logs
