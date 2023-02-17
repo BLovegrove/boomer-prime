@@ -27,11 +27,7 @@ class Ready(commands.Cog):
             self.bot.logger.info(f"Synced {len(synced)} commands.")
             await PresenceHandler.update_status(self.bot)
         except Exception as e:
-            self.bot.logger.error(e)
-            stacktrace = traceback.extract_stack(e.__traceback__.tb_frame)
-            self.bot.logger.warn(
-                f'{type(e).__name__} while syncing slash commands in ("{stacktrace[-1].filename}", line {stacktrace[-1].lineno})'
-            )
+            self.bot.logger.exception("Error while syncing slash commands.")
             return
 
 

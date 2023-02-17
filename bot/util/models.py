@@ -31,7 +31,6 @@ class LavaBot(commands.Bot):
             cfg.lavalink.password,
             cfg.lavalink.region,
         )
-        self.logger.info(f"Created lavalink Client: {self.lavalink}")
         for cog in self.cogs.values():
             self.lavalink.add_event_hooks(cog)
 

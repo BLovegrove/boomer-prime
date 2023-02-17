@@ -18,8 +18,8 @@ class VoiceHandler:
             return player
         except Exception as e:
             stacktrace = traceback.extract_stack(e.__traceback__.tb_frame)
-            self.bot.logger.warn(
-                f'{type(e).__name__} while fetching player in ("{stacktrace[-1].filename}", line {stacktrace[-1].lineno}) Caused by ("{stacktrace[-2].filename}", line {stacktrace[-2].lineno})'
+            self.bot.logger.exception(
+                f'Error while fetching player in "{stacktrace[-2].filename}", line {stacktrace[-2].lineno}'
             )
             return
 
