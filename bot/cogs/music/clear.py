@@ -14,7 +14,6 @@ class clear(commands.Cog):
         self.music_handler = MusicHandler(bot)
         self.voice_handler = VoiceHandler(bot)
         self.queue_handler = QueueHandler(bot, self.voice_handler)
-        self.player = self.voice_handler.fetch_player(self.bot)
 
     @app_commands.command(description="Clears the whole (or part of the) queue")
     async def clear(self, interaction: discord.Interaction, index: int | None):

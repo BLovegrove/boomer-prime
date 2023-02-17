@@ -5,15 +5,18 @@ import lavalink
 
 import config as cfg
 
-from ..handlers import embeds, queue, voice
+from ..handlers.embeds import PlaylistEmbedBuilder, SkipEmbedBuilder, TrackEmbedBuilder
+from ..handlers.presence import PresenceHandler
+from ..handlers.queue import QueueHandler
+from ..handlers.voice import VoiceHandler
 from ..util import models
 
 
 class MusicHandler:
     def __init__(self, bot: models.LavaBot) -> None:
         self.bot = bot
-        self.voice_handler = voice.VoiceHandler(self.bot)
-        self.queue_handler = queue.QueueHandler(self.bot, self.voice_handler)
+        self.voice_handler = VoiceHandler(self.bot)
+        self.queue_handler = QueueHandler(self.bot, self.voice_handler)
 
     async def __add_track(
         self,
@@ -26,12 +29,12 @@ class MusicHandler:
         embed = discord.Embed()
 
         if track:
-            embed = embeds.TrackEmbedBuilder(interaction, track, player).construct()
+            embed = TrackEmbedBuilder(interaction, track, player).construct()
             player.add(track)
             self.bot.logger.info(f"Track added to queue: {track.title}")
 
         elif tracks and result:
-            embed = embeds.PlaylistEmbedBuilder(interaction, result, player).construct()
+            embed = PlaylistEmbedBuilder(interaction, result, player).construct()
 
             for track in tracks:
                 player.add(track)
@@ -102,7 +105,7 @@ class MusicHandler:
             return
 
         self.queue_handler.update_pages(player)
-        await self.voice_handler.update_status(self.bot, player)
+        await PresenceHandler.update_status(self.bot, player)
 
         return
 
@@ -135,7 +138,7 @@ class MusicHandler:
                 )
                 return
 
-            embed = embeds.SkipEmbedBuilder(interaction, next_track, player, 0)
+            embed = SkipEmbedBuilder(interaction, next_track, player, 0)
             await interaction.response.send_message(
                 ":repeat_one: Repeat enabled - looping song.",
                 embed=embed.construct(),
@@ -202,10 +205,10 @@ class MusicHandler:
             await player.skip()
             self.bot.logger.info("Skipping current track...")
 
-            embed = embeds.SkipEmbedBuilder(interaction, next_track, player, index)
+            embed = SkipEmbedBuilder(interaction, next_track, player, index)
             await interaction.response.send_message(embed=embed.construct())
 
             self.queue_handler.update_pages(player)
-            await self.voice_handler.update_status(self.bot, player)
+            await PresenceHandler.update_status(self.bot, player)
 
             return

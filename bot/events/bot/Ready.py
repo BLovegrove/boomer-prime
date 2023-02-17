@@ -5,6 +5,7 @@ from discord.ext import commands
 
 import config as cfg
 
+from ...handlers.presence import PresenceHandler
 from ...handlers.voice import VoiceHandler
 from ...util.models import LavaBot
 
@@ -24,7 +25,7 @@ class Ready(commands.Cog):
             self.bot.tree.copy_global_to(guild=guild_obj)
             synced = await self.bot.tree.sync(guild=guild_obj)
             self.bot.logger.info(f"Synced {len(synced)} commands.")
-            await self.voice_handler.update_status(self.bot)
+            await PresenceHandler.update_status(self.bot)
         except Exception as e:
             self.bot.logger.error(e)
             stacktrace = traceback.extract_stack(e.__traceback__.tb_frame)

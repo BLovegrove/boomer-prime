@@ -1,4 +1,3 @@
-import sys
 import traceback
 
 import discord
@@ -6,14 +5,14 @@ import lavalink
 
 import config as cfg
 
-from ..util import models
+from ..util.models import LavaBot, LavalinkVoiceClient
 
 
 class VoiceHandler:
-    def __init__(self, bot: models.LavaBot) -> None:
+    def __init__(self, bot: LavaBot) -> None:
         self.bot = bot
 
-    def fetch_player(self, bot: models.LavaBot) -> lavalink.DefaultPlayer:
+    def fetch_player(self, bot: LavaBot) -> lavalink.DefaultPlayer:
         try:
             player = bot.lavalink.player_manager.get(cfg.guild.id)
             return player
@@ -63,7 +62,7 @@ class VoiceHandler:
         if not player.is_connected:
             player.store("pages", 0)
             player.store("idle", False)
-            await interaction.user.voice.channel.connect(cls=models.LavalinkVoiceClient)
+            await interaction.user.voice.channel.connect(cls=LavalinkVoiceClient)
 
         elif player.channel_id != interaction.user.voice.channel.id:
             self.bot.logger.warn(
@@ -83,7 +82,7 @@ class VoiceHandler:
         self.bot.player_exists = True
         return player
 
-    async def disconnect(self, bot: models.LavaBot, player: lavalink.DefaultPlayer):
+    async def disconnect(self, bot: LavaBot, player: lavalink.DefaultPlayer):
         player.queue.clear()
         await player.stop()
         player.set_repeat(False)
@@ -92,33 +91,3 @@ class VoiceHandler:
         await player.clear_filters()
         await player.destroy()
         await self.update_status(bot, player)
-
-    async def update_status(
-        self, bot: models.LavaBot, player: lavalink.DefaultPlayer = None
-    ):
-        suffix = ""
-
-        if player and player.fetch("track_repeat"):
-            suffix = " (on repeat)"
-
-        activity = None
-        status = None
-
-        if player and player.is_playing:
-            activity = discord.Activity(
-                name=f"{player.current.title + suffix}",
-                type=discord.ActivityType.listening,
-            )
-            status = discord.Status.online
-            await bot.change_presence(activity=activity, status=status)
-
-        else:
-            activity = discord.Activity(
-                name="nothing.", type=discord.ActivityType.listening
-            )
-            status = discord.Status.idle
-            await bot.change_presence(activity=activity, status=status)
-
-        bot.logger.info(f"Updated activity info to: {activity.name}")
-        bot.logger.info(f"Updated status info to: {status}")
-        return
