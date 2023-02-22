@@ -1,1 +1,1 @@
-from . import cogs, events, logs
+from . import cogs, events

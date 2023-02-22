@@ -1,0 +1,31 @@
+[2023-02-17 20:54:08] [INFO    ] discord.client.login: logging in using static token
+[2023-02-17 20:54:09] [INFO    ] discord.gateway.received_message: Shard ID None has connected to Gateway (Session ID: fb201869f46e60a98c433b3f38b36d18).
+[2023-02-17 20:54:11] [INFO    ] bot.on_ready: Bot is logged in as Boomer (Prime)#7010
+[2023-02-17 20:54:11] [INFO    ] bot.on_ready: Syncing slash commands...
+[2023-02-17 20:54:12] [INFO    ] bot.on_ready: Synced 3 commands.
+[2023-02-17 20:54:12] [INFO    ] bot.update_status: Updated presence: idle - nothing.
+[2023-02-17 20:58:00] [INFO    ] discord.client.login: logging in using static token
+[2023-02-17 20:58:01] [INFO    ] discord.gateway.received_message: Shard ID None has connected to Gateway (Session ID: 40b6fdfc63af1e51a4c82f96c376120a).
+[2023-02-17 20:58:03] [INFO    ] bot.on_ready: Bot is logged in as Boomer (Prime)#7010
+[2023-02-17 20:58:03] [INFO    ] bot.on_ready: Syncing slash commands...
+[2023-02-17 20:58:04] [INFO    ] bot.on_ready: Synced 3 commands.
+[2023-02-17 20:58:04] [INFO    ] bot.update_status: Updated presence: idle - nothing.
+[2023-02-17 20:59:40] [INFO    ] discord.client.login: logging in using static token
+[2023-02-17 20:59:42] [INFO    ] discord.gateway.received_message: Shard ID None has connected to Gateway (Session ID: c6803669c056ba13874b90cbb48d94f0).
+[2023-02-17 20:59:44] [INFO    ] bot.on_ready: Bot is logged in as Boomer (Prime)#7010
+[2023-02-17 20:59:44] [INFO    ] bot.on_ready: Syncing slash commands...
+[2023-02-17 20:59:44] [INFO    ] bot.on_ready: Synced 3 commands.
+[2023-02-17 20:59:44] [INFO    ] bot.update_status: Updated presence: idle - nothing.
+[2023-02-17 20:59:53] [INFO    ] discord.client  : logging in using static token
+[2023-02-17 20:59:55] [INFO    ] discord.gateway : Shard ID None has connected to Gateway (Session ID: 6281a7f8641de280aab920634990d479).
+[2023-02-17 20:59:57] [INFO    ] bot             : Bot is logged in as Boomer (Prime)#7010
+[2023-02-17 20:59:57] [INFO    ] bot             : Syncing slash commands...
+[2023-02-17 21:00:23] [INFO    ] discord.client: logging in using static token
+[2023-02-17 21:00:24] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: dcf89231bf3fb2fb88ca2276050f858a).
+[2023-02-17 21:00:26] [INFO    ] bot           : Bot is logged in as Boomer (Prime)#7010
+[2023-02-17 21:00:26] [INFO    ] bot           : Syncing slash commands...
+[2023-02-17 21:00:30] [INFO    ] discord.client : logging in using static token
+[2023-02-17 21:00:32] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: dc801f640beec36c2b81fa837f801b5e).
+[2023-02-17 21:00:34] [INFO    ] bot            : Bot is logged in as Boomer (Prime)#7010
+[2023-02-17 21:00:34] [INFO    ] bot            : Syncing slash commands...
+[2023-02-17 21:00:34] [WARNING ] discord.http   : We are being rate limited. PUT https://discord.com/api/v10/applications/887606123782344704/guilds/629187996939190291/commands responded with 429. Retrying in 9.91 seconds.

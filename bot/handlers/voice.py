@@ -54,11 +54,6 @@ class VoiceHandler:
             return
 
         # bot validation: connected to VC
-
-        # player: lavalink.DefaultPlayer = self.bot.lavalink.player_manager.create(
-        #     interaction.guild.id
-        # )
-
         if not player.is_connected:
             player.store("pages", 0)
             player.store("idle", False)

@@ -4,6 +4,7 @@ from discord.ext import commands
 
 import config as cfg
 
+from ..handlers.logging import LogHandler
 from . import helper
 
 
@@ -17,10 +18,14 @@ class LavaBot(commands.Bot):
         super().__init__(
             command_prefix=commands.when_mentioned, intents=discord.Intents.all()
         )
+        self.log_handler = LogHandler()
         self.cog_list = helper.cogs.search()
         self.event_list = helper.events.search()
         self.lavalink = None
-        self.logger = helper.logs.getLogger()
+        self.logger = self.log_handler.bot
+        # self.initlog = log_handler.init
+        # self.disclog = log_handler.discord
+        # self.logger = log_handler.lavalink
         self.player_exists = False
 
     def update_lavalink(self):
