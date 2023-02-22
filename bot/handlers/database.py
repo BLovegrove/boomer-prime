@@ -1,6 +1,7 @@
 import sqlite3
 
 import discord
+from loguru import logger
 
 from ..util.models import LavaBot
 from ..util.transcoder import DictStrTranscoder
@@ -91,7 +92,7 @@ class DBHandler:
 
         if favs_data == "":
             # TODO: some error checking here
-            self.bot.logger.error("failed to grab fav list data")
+            logger.error("failed to grab fav list data")
             return
 
         favs = DictStrTranscoder.decode(favs_data)

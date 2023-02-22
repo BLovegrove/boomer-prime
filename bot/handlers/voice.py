@@ -1,4 +1,5 @@
 import traceback
+from loguru import logger
 
 import discord
 import lavalink
@@ -18,7 +19,7 @@ class VoiceHandler:
             return player
         except Exception as e:
             stacktrace = traceback.extract_stack(e.__traceback__.tb_frame)
-            self.bot.logger.exception(
+            logger.exception(
                 f'Error while fetching player in "{stacktrace[-2].filename}", line {stacktrace[-2].lineno}'
             )
             return
@@ -41,7 +42,7 @@ class VoiceHandler:
             await interaction.response.send_message(
                 "Try sending this within a valid server.", ephemeral=True
             )
-            self.bot.logger.error(
+            logger.error(
                 f"Failed to find guild member in interaction for VoiceHandler command. NOT_MEMBER:{not interaction.guild.get_member(interaction.user.id)}, OUTSIDE_GUILD:{not interaction.guild}, WITHIN_CHANNEL:{not interaction.channel}"
             )
             return
@@ -60,7 +61,7 @@ class VoiceHandler:
             await interaction.user.voice.channel.connect(cls=LavalinkVoiceClient)
 
         elif player.channel_id != interaction.user.voice.channel.id:
-            self.bot.logger.warn(
+            logger.warning(
                 f"Bot is already in a channel. Failed to move the bot. PLAYER_CHANNEL:{player.channel_id}, MEMBER_CHANNEL:{interaction.user.voice.channel.id}"
             )
             await interaction.response.send_message(

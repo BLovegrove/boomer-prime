@@ -2,6 +2,7 @@ import traceback
 
 import discord
 import lavalink
+from loguru import logger
 
 import config as cfg
 
@@ -31,7 +32,7 @@ class MusicHandler:
         if track:
             embed = TrackEmbedBuilder(interaction, track, player).construct()
             player.add(track)
-            self.bot.logger.info(f"Track added to queue: {track.title}")
+            logger.info(f"Track added to queue: {track.title}")
 
         elif tracks and result:
             embed = PlaylistEmbedBuilder(interaction, result, player).construct()
@@ -39,7 +40,7 @@ class MusicHandler:
             for track in tracks:
                 player.add(track)
 
-            self.bot.logger.info(f"Playlist added to queue.")
+            logger.info(f"Playlist added to queue.")
 
         if player.fetch("idle"):
             player.store("idle", False)
@@ -60,7 +61,7 @@ class MusicHandler:
         if not player:
             return
 
-        self.bot.logger.info(f"Attempting to play song... Query: {search}")
+        logger.info(f"Attempting to play song... Query: {search}")
 
         await interaction.response.defer()
 
@@ -92,14 +93,14 @@ class MusicHandler:
                     await interaction.response.edit_message(
                         content="Something unexpected happened. Contact your server owner or local bot dev(s) immediately and let them know the exact command you tried to run."
                     )
-                    self.bot.logger.warn(
+                    logger.warning(
                         f"Load type for play request defaulted. Query '{search}' result as follows:"
                     )
-                    self.bot.logger.warn(result)
+                    logger.warning(result)
 
         except Exception as e:
             stacktrace = traceback.extract_stack(e.__traceback__.tb_frame)
-            self.bot.logger.exception(
+            logger.exception(
                 f'Error while attempting to play track from "{stacktrace[-2].filename}", line {stacktrace[-2].lineno}'
             )
             return
@@ -144,14 +145,14 @@ class MusicHandler:
                 embed=embed.construct(),
             )
             await player.seek(0)
-            self.bot.logger.info("Skipped song (repeat enabled).")
+            logger.info("Skipped song (repeat enabled).")
             return
 
         if index < 0:
             await interaction.response.send_message(
                 ":warning: That index is too low! Queue starts at #1.", ephemeral=True
             )
-            self.bot.logger.warn(
+            logger.warning(
                 f"Skip failed. Index too low (expected: >=1. Recieved: {index})"
             )
             return
@@ -161,14 +162,14 @@ class MusicHandler:
                 f":warning: That index is too high! Queue only {len(player.queue)} items long.",
                 ephemeral=True,
             )
-            self.bot.logger.warn(
+            logger.warning(
                 f"Skip failed. Index too high (expected: <={len(player.queue)}. Recieved: {index})"
             )
             return
 
         else:
             if trim_queue:
-                self.bot.logger.info(
+                logger.info(
                     f"Skipped queue to track {index} of {len(player.queue) + 1}"
                 )
 
@@ -178,9 +179,7 @@ class MusicHandler:
                     return
 
             else:
-                self.bot.logger.info(
-                    f"Jumped to track {index} of {len(player.queue)} in queue."
-                )
+                logger.info(f"Jumped to track {index} of {len(player.queue)} in queue.")
                 jump_track = player.queue.pop(index - 1)
 
                 if not jump_track:
@@ -196,14 +195,14 @@ class MusicHandler:
                     next_track = lavalink.decode_track(next_track)
 
                 except Exception as e:
-                    self.bot.logger.error(e)
+                    logger.error(e)
 
             if not next_track:
                 await interaction.response.send_message("Error! Track not found.")
                 return
 
             await player.skip()
-            self.bot.logger.info("Skipping current track...")
+            logger.info("Skipping current track...")
 
             embed = SkipEmbedBuilder(interaction, next_track, player, index)
             await interaction.response.send_message(embed=embed.construct())

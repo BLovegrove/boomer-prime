@@ -1,50 +1,36 @@
-import sqlite3
+import os
+import pathlib
+import sys
 
-import discord
+from loguru import logger
 
-conn = sqlite3.connect("bot.sqlite")
-cursor = conn.cursor()
+import config as cfg
 
-
-# cursor.execute(
-#     "INSERT INTO bgm(member_id,track_url) VALUES(278441913361629195,'https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=1s')"
-# )
-
-# cursor.execute(
-#     "INSERT INTO favs(guild_role_id,list_data) VALUES(1001722386976084071,'╳name1◆https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=1s▶name2◆https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=1s▶name3◆https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=1s')"
-# )
-
-# conn.commit()
-
-# result = cursor.execute(
-#     "SELECT track_url FROM bgm WHERE member_id=278441913361629195"
-# ).fetchone()
-# print(result[0])
-
-result = cursor.execute("SELECT * FROM favs").fetchall()
-print(result)
+print(pathlib.Path(__file__).stem)
 
 
-# import discord
-# from discord.ext import commands
+def main():
+    logger.remove()
+    logger.add(
+        sink="bot.log",
+        rotation="1 day",
+        compression="zip",
+        colorize=True,
+        enqueue=True,
+        backtrace=True,
+        format="{time:YYYY-MM-DD HH:mm:ss} | <lvl>{level.name:<8}</> | {file.name:<18}#{line} | {message}",
+    )
+    logger.debug("Hello world!")
+    logger.info("Hello world!")
+    logger.warning("Hello world!")
+    logger.error("Hello world!")
+    logger.critical("Hello world!")
 
-# import config as cfg
-# from bot.handlers.database import DBHandler
-# from bot.util import helper, models
-
-# # logger = helper.logs.getLogger()
-
-
-# # make sure the main py file is being run as a file and not imported
-# def main():
-#     bot = commands.Bot(commands.when_mentioned, intents=discord.Intents.all())
-#     bot.run(cfg.bot.token)
-#     member = bot.guilds[0].get_member(278441913361629195)
-#     handler = DBHandler(bot)
-#     favs = handler.fetch_favs(member)
-#     print(favs)
-#     handler.close()
+    try:
+        print(str(13 / 0))
+    except Exception:
+        logger.exception("Well fuck.")
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()

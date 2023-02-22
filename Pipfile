@@ -8,6 +8,7 @@ name = "pypi"
 pynacl = "*"
 lavalink = "*"
 stringprogressbar = "*"
+loguru = "*"
 
 [dev-packages]
 

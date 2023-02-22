@@ -38,9 +38,7 @@ class QueueEnd(commands.Cog):
             await self.voice_handler.disconnect(self.bot, player)
 
             if not player.channel_id:
-                self.bot.logger.warn(
-                    f"Failed to find text channel while queuing idle track."
-                )
+                logger.warning(f"Failed to find text channel while queuing idle track.")
                 return
 
             channel = self.bot.get_channel(player.channel_id)

@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from loguru import logger
 
 import config as cfg
 
@@ -16,16 +17,16 @@ class Ready(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         self.bot.update_lavalink()
-        self.bot.logger.info(f"Bot is logged in as {self.bot.user}")
-        self.bot.logger.info("Syncing slash commands...")
+        logger.info(f"Bot is logged in as {self.bot.user}")
+        logger.info("Syncing slash commands...")
         try:
             guild_obj = discord.Object(id=cfg.guild.id)
             self.bot.tree.copy_global_to(guild=guild_obj)
             synced = await self.bot.tree.sync(guild=guild_obj)
-            self.bot.logger.info(f"Synced {len(synced)} commands.")
+            logger.info(f"Synced {len(synced)} commands.")
             await PresenceHandler.update_status(self.bot)
         except Exception as e:
-            self.bot.logger.exception("Error while syncing slash commands.")
+            logger.exception("Error while syncing slash commands.")
             return
 
 
