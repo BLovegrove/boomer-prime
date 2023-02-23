@@ -56,58 +56,6 @@ class VoiceHandler:
         player.store("last_channel", interaction.channel_id)
         return player
 
-    # async def ensure_voice_old(self, interaction: discord.Interaction):
-    #     player: lavalink.DefaultPlayer = self.bot.lavalink.player_manager.create(
-    #         interaction.guild_id
-    #     )
-
-    #     # ---------------------------------- guards ---------------------------------- #
-    #     # sender validation: in guild
-    #     if (
-    #         (not interaction.guild.get_member(interaction.user.id))
-    #         or (not interaction.guild)
-    #         or (not interaction.channel)
-    #     ):
-    #         await interaction.response.send_message(
-    #             "Try sending this within a valid server.", ephemeral=True
-    #         )
-    #         logger.error(
-    #             f"Failed to find guild member in interaction for VoiceHandler command. NOT_MEMBER:{not interaction.guild.get_member(interaction.user.id)}, OUTSIDE_GUILD:{not interaction.guild}, WITHIN_CHANNEL:{not interaction.channel}"
-    #         )
-    #         return
-
-    #     # sender validation: in voice
-    #     if not interaction.user.voice:
-    #         await interaction.response.send_message(
-    #             "You need to join a voice channel.", ephemeral=True
-    #         )
-    #         return
-
-    #     # bot validation: connected to VC
-    #     if not player.is_connected:
-    #         player.store("pages", 0)
-    #         player.store("idle", False)
-    #         logger.debug(f"Player is connected to VC: {player.is_connected}")
-    #         await interaction.user.voice.channel.connect(cls=LavalinkVoiceClient)
-
-    #     elif player.channel_id != interaction.user.voice.channel.id:
-    #         logger.warning(
-    #             f"Bot is already in a channel. Failed to move the bot. PLAYER_CHANNEL:{player.channel_id}, MEMBER_CHANNEL:{interaction.user.voice.channel.id}"
-    #         )
-    #         await interaction.response.send_message(
-    #             f"{cfg.bot.name} is already in <#{player.channel_id}> :rolling_eyes:"
-    #         )
-    #         await interaction.followup.send(
-    #             "The bot can't be in two places at once - join the linked channel to use them.",
-    #             ephemeral=True,
-    #         )
-    #         return
-
-    #     # --------------------- end guards, run success condition -------------------- #
-
-    #     self.bot.player_exists = True
-    #     return player
-
     async def disconnect(self, bot: LavaBot, player: lavalink.DefaultPlayer):
         player.queue.clear()
         await player.stop()

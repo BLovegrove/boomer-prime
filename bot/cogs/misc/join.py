@@ -5,21 +5,19 @@ from discord.ext import commands
 
 import config as cfg
 
-from ...handlers.music import MusicHandler
 from ...handlers.voice import VoiceHandler
 from ...util.models import LavaBot
 
 
-class Template(commands.Cog):
+class Join(commands.Cog):
     def __init__(self, bot: LavaBot) -> None:
         self.bot = bot
-        self.music_handler = MusicHandler(bot)
         self.voice_handler = VoiceHandler(bot)
 
     @app_commands.command(
-        description=f"Summons {cfg.bot.name} to your voice channel and plays the summoners idle tune."
+        description=f"Summons {cfg.bot.name} to your voice channel and plays the summoners idle tune.",
     )
-    async def ok(self, interaction: discord.Interaction):
+    async def join(self, interaction: discord.Interaction):
         await interaction.response.defer()
         player = await self.voice_handler.ensure_voice(interaction)
 
@@ -33,4 +31,4 @@ class Template(commands.Cog):
 
 
 async def setup(bot: LavaBot):
-    await bot.add_cog(Template(bot))
+    await bot.add_cog(Join(bot))

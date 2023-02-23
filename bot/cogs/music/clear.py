@@ -8,7 +8,7 @@ from ...handlers.voice import VoiceHandler
 from ...util.models import LavaBot
 
 
-class clear(commands.Cog):
+class Clear(commands.Cog):
     def __init__(self, bot: LavaBot) -> None:
         self.bot = bot
         self.music_handler = MusicHandler(bot)
@@ -44,4 +44,4 @@ class clear(commands.Cog):
 
 
 async def setup(bot: LavaBot):
-    await bot.add_cog(clear(bot))
+    await bot.add_cog(Clear(bot))
