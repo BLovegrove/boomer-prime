@@ -54,7 +54,7 @@ class ClearedEmbedBuilder(TrackEmbedBuilder):
         player: lavalink.DefaultPlayer,
         index: int,
     ) -> None:
-        super().__init__(interaction, track, player, index)
+        super().__init__(interaction, track, player)
 
         if not track:
             return
@@ -74,18 +74,17 @@ class SkipEmbedBuilder(TrackEmbedBuilder):
         interaction: discord.Interaction,
         track: lavalink.AudioTrack | lavalink.DeferredAudioTrack,
         player: lavalink.DefaultPlayer,
-        index: int,
     ) -> None:
-        super().__init__(interaction, track, player, index)
+        super().__init__(interaction, track, player)
 
         self.embed.set_author(
-            name=f"Track skipped by {self.sender.display_name}",
+            name=f"Track(s) skipped by {self.sender.display_name}",
             url=self.embed.author.url,
             icon_url=self.embed.author.icon_url,
         )
         self.embed.title = f"Now playing: {track.title}"
         self.embed.set_footer(
-            text=f"{max(0, len(player.queue) - 1)} tracks left in queue."
+            text=f"{max(0, len(player.queue) - 1)} track(s) left in queue."
         )
 
 

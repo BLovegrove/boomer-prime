@@ -29,9 +29,7 @@ class InterceptHandler(logging.Handler):
         )
 
 
-logging.basicConfig(
-    handlers=[InterceptHandler()], level=cfg.logging.external_level, force=True
-)
+logging.basicConfig(handlers=[InterceptHandler()], level="INFO", force=True)
 
 # make sure the main py file is being run as a file and not imported
 def main():
@@ -39,8 +37,19 @@ def main():
     logger.remove()
     logger_format = "<g>{time:YYYY-MM-DD HH:mm:ss}</> <c>|</> <lvl>{level.name:<8}</> <c>|</> <m>{name:<36}</><y>LINE:{line:<4}</> <c>|</> {message}"
     logger.add(
-        sink="bot.log",
-        level=cfg.logging.bot_level,
+        sink="logs/bot.log",
+        level="INFO",
+        rotation="1 day",
+        compression="zip",
+        colorize=True,
+        enqueue=True,
+        format=logger_format,
+        backtrace=True,
+        diagnose=False,
+    )
+    logger.add(
+        sink="logs/bot-debug.log",
+        level="DEBUG",
         rotation="1 day",
         compression="zip",
         colorize=True,

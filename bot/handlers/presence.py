@@ -32,5 +32,5 @@ class PresenceHandler:
             status = discord.Status.idle
 
         await bot.change_presence(activity=activity, status=status)
-        logger.info(f"Updated presence: {status} - {activity.name}")
+        logger.debug(f"Updated presence: {status} - {activity.name}")
         return

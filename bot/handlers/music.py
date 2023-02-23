@@ -110,12 +110,6 @@ class MusicHandler:
     async def skip(
         self, interaction: discord.Interaction, index: int, trim_queue: bool = True
     ):
-        if not self.bot.player_exists:
-            await interaction.response.send_message(
-                f":warning: There is no player running. Play a song or invite {cfg.bot.name} to a VC first."
-            )
-            return
-
         player = await self.voice_handler.ensure_voice(interaction)
 
         if len(player.queue) == 0 and player.loop != player.LOOP_SINGLE:
@@ -199,7 +193,7 @@ class MusicHandler:
             await player.skip()
             logger.info("Skipping current track...")
 
-            embed = SkipEmbedBuilder(interaction, next_track, player, index)
+            embed = SkipEmbedBuilder(interaction, next_track, player)
             await interaction.response.send_message(embed=embed.construct())
 
             self.queue_handler.update_pages(player)

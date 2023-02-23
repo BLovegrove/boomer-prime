@@ -11,7 +11,7 @@ class Template(commands.Cog):
         self.music_handler = MusicHandler(bot)
         self.voice_handler = VoiceHandler(bot)
 
-    @app_commands.command()
+    @app_commands.command(self, interaction: discord.Interaction)
     async def method():
         return
 

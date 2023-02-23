@@ -34,24 +34,28 @@ class VoiceHandler:
 
         # These are commands that require the bot to join a voicechannel (i.e. initiating playback).
         # Commands such as volume/skip etc don't require the bot to be in a voicechannel so don't need listing here.
-        should_connect = interaction.command.name in ("play", "ok")
+        should_connect = interaction.command.name in ("play", "join")
 
         if not interaction.user.voice or not interaction.user.voice.channel:
             # Our cog_command_error handler catches this and sends it to the voicechannel.
             # Exceptions allow us to "short-circuit" command invocation via checks so the
             # execution state of the command goes no further.
-            raise commands.CommandInvokeError("Join a voicechannel first.")
+            await interaction.response.send_message("Join a voicechannel first")
 
         v_client = interaction.guild.voice_client
         if not v_client:
             if not should_connect:
-                raise commands.CommandInvokeError("Not connected.")
+                # raise commands.CommandInvokeError("Not connected.")
+                await interaction.response.send_message(
+                    f"{cfg.bot.name} not running yet. Try /join or /play first"
+                )
 
-            player.store("channel", interaction.channel.id)
             await interaction.user.voice.channel.connect(cls=LavalinkVoiceClient)
         else:
             if v_client.channel.id != interaction.user.voice.channel.id:
-                raise commands.CommandInvokeError("You need to be in my voicechannel.")
+                await interaction.response.send_message(
+                    f"Not connected to my channel. Join <#{player.channel_id}>"
+                )
 
         player.store("last_channel", interaction.channel_id)
         return player
