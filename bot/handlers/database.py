@@ -77,13 +77,19 @@ class DBHandler:
 
         return
 
-    def fetch_fav(self, member: discord.Member):
+    def fetch_favs(self, member: discord.Member):
+        """
+        Returns a tuple with the first item being the role_id the list is for, and the second being the list itself
+
+        The list consists of a dictionary of song name + song url pairs.
+        """
         member_roles = member.roles
         available_favs: list[str] = self.cursor.execute(
             "SELECT role_id FROM favs"
         ).fetchall()
         fav_ids: list[str] = []
         favs_data = ""
+        favs_role = ""
         for fav in available_favs:
             fav_ids.append(fav[0])
         fav_ids.reverse()
@@ -92,6 +98,7 @@ class DBHandler:
                 favs_data: str = self.cursor.execute(
                     f"SELECT list_data FROM favs WHERE role_id='{role.id}'"
                 ).fetchone()[0]
+                favs_role = role.name
 
         if favs_data == "":
             # TODO: some error checking here
@@ -102,9 +109,9 @@ class DBHandler:
         if not favs:
             return
 
-        return favs
+        return (favs_role, favs)
 
-    def fetch_fav_all(self):
+    def fetch_favs_all(self):
 
         result = self.cursor.execute("SELECT * FROM favs").fetchall()
         favs: dict[str, dict[str, str]] = {}
@@ -117,14 +124,14 @@ class DBHandler:
 
         return favs
 
-    def delete_fav(self, role_id: str):
+    def delete_favs(self, role_id: int):
 
         self.cursor.execute(f"DELETE FROM favs WHERE role_id='{role_id}'")
         self.conn.commit()
 
         return
 
-    def __insert_fav(self, role_id: str, favs: dict[str, str]):
+    def __insert_favs(self, role_id: int, favs: dict[str, str]):
 
         self.cursor.execute(
             f"INSERT INTO favs(role_id,list_data) VALUES('{role_id}','{DictStrTranscoder.encode(favs)}')"
@@ -133,7 +140,7 @@ class DBHandler:
 
         return
 
-    def __update_fav(self, role_id: str, favs: dict[str, str]):
+    def __update_favs(self, role_id: int, favs: dict[str, str]):
 
         self.cursor.execute(
             f"UPDATE favs SET list_data='{DictStrTranscoder.encode(favs)}' WHERE role_id='{role_id}'"
@@ -142,18 +149,15 @@ class DBHandler:
 
         return
 
-    def update_insert_fav(self, role_id: str, favs: dict[str, str]):
+    def update_insert_favs(self, role_id: int, favs: dict[str, str]):
 
-        favs_exist = (
-            self.cursor.execute(
-                f"SELECT role_id FROM favs WHERE role_id='{role_id}'"
-            ).fetchone()
-            != []
-        )
+        result = self.cursor.execute(
+            f"SELECT role_id FROM favs WHERE role_id='{role_id}'"
+        ).fetchone()
 
-        if favs_exist:
-            self.__update_fav(role_id, favs)
+        if result:
+            self.__update_favs(role_id, favs)
         else:
-            self.__insert_fav(role_id, favs)
+            self.__insert_favs(role_id, favs)
 
         return

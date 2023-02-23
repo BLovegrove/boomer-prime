@@ -11,8 +11,8 @@ class Template(commands.Cog):
         self.music_handler = MusicHandler(bot)
         self.voice_handler = VoiceHandler(bot)
 
-    @app_commands.command(self, interaction: discord.Interaction)
-    async def method():
+    @app_commands.command()
+    async def method(self, interaction: discord.Interaction):
         return
 
 async def setup(bot: LavaBot):

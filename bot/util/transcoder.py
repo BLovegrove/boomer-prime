@@ -10,7 +10,7 @@ class DictStrTranscoder:
     def encode(dict: dict[str, str]):
         dict_string = ""
 
-        for key, value in dict:
+        for key, value in dict.items():
             if dict_string == "":
                 dict_string += f"╳{key}◆{value}"
 

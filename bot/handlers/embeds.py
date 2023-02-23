@@ -219,3 +219,21 @@ class ListEmbedBuilder:
 
     def construct(self):
         return self.embed
+
+
+class FavsEmbedBuilder:
+    def __init__(self, role_name: str, favs: dict[str, str]) -> None:
+        self.embed = discord.Embed(
+            color=cfg.style.embed_color,
+            title=f"Favourites list: {role_name} edition!",
+            description="Simply click the buttons below to ready up that song and hit submit to add all ready songs to the queue!",
+        )
+        self.embed.set_author(
+            name="This is still a WIP. For now, this only prints a list of all your favourites. Sorry!"
+        )
+        self.embed.set_footer(text="Keep in mind you can only ready each song once!")
+        for key, value in list(favs.items()):
+            self.embed.add_field(name=key, value=value, inline=False)
+
+    def construct(self):
+        return self.embed
