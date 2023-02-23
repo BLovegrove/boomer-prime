@@ -28,8 +28,6 @@ class Play(commands.Cog):
             return
 
         player = self.voice_handler.fetch_player(self.bot)
-        if not player:
-            return
 
         if not player.paused:
             await interaction.followup.send(

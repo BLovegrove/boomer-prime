@@ -58,8 +58,6 @@ class MusicHandler:
         player: lavalink.DefaultPlayer = await self.voice_handler.ensure_voice(
             interaction
         )
-        if not player:
-            return
 
         logger.info(f"Attempting to play song... Query: {search}")
 
@@ -106,7 +104,6 @@ class MusicHandler:
             return
 
         self.queue_handler.update_pages(player)
-        await PresenceHandler.update_status(self.bot, player)
 
         return
 
@@ -120,8 +117,6 @@ class MusicHandler:
             return
 
         player = await self.voice_handler.ensure_voice(interaction)
-        if not player:
-            return
 
         if len(player.queue) == 0 and player.loop != player.LOOP_SINGLE:
             await interaction.response.send_message(

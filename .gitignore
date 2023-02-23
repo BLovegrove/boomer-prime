@@ -161,3 +161,5 @@ cython_debug/
 
 # custom ignore
 config.py
+bot.db
+bot.sqlite

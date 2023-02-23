@@ -1,5 +1,6 @@
 import discord
 import lavalink
+from loguru import logger
 
 from ..util.models import LavaBot
 
@@ -18,20 +19,18 @@ class PresenceHandler:
         activity = None
         status = None
 
-        if player and player.is_playing:
+        if player and player.is_playing and not player.fetch("idle"):
             activity = discord.Activity(
                 name=f"{player.current.title + suffix}",
                 type=discord.ActivityType.listening,
             )
             status = discord.Status.online
-            await bot.change_presence(activity=activity, status=status)
-
         else:
             activity = discord.Activity(
                 name="nothing.", type=discord.ActivityType.listening
             )
             status = discord.Status.idle
-            await bot.change_presence(activity=activity, status=status)
 
-        bot.logger.info(f"Updated presence: {status} - {activity.name}")
+        await bot.change_presence(activity=activity, status=status)
+        logger.info(f"Updated presence: {status} - {activity.name}")
         return

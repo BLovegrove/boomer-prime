@@ -33,4 +33,13 @@
         "--profile",
         "black"
     ],
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:boomer-prime}/bot.db",
+            "name": "BoomerPrime"
+        }
+    ],
+    "sqltools.useNodeRuntime": true,
 }

@@ -2,6 +2,7 @@ import logging
 import logging.handlers
 import sys
 
+import discord
 from loguru import logger
 
 import config as cfg
@@ -28,27 +29,36 @@ class InterceptHandler(logging.Handler):
         )
 
 
+logging.basicConfig(
+    handlers=[InterceptHandler()], level=cfg.logging.external_level, force=True
+)
+
 # make sure the main py file is being run as a file and not imported
 def main():
     bot = LavaBot()
-    discord_logger = logging.getLogger("discord")
-    for handler in discord_logger.handlers:
-        discord_logger.removeHandler(handler)
-    print(discord_logger.handlers)
-    discord_logger.addHandler(InterceptHandler())
     logger.remove()
-    logger_format = "<g>{time:YYYY-MM-DD HH:mm:ss}</> <c>|</> <lvl>{level.name:<8}</> <c>|</> <m>{name:<32}</><y>LINE:{line:<4}</> <c>|</> {message}"
-    logger.add(sys.stdout, colorize=True, backtrace=True, format=logger_format)
+    logger_format = "<g>{time:YYYY-MM-DD HH:mm:ss}</> <c>|</> <lvl>{level.name:<8}</> <c>|</> <m>{name:<36}</><y>LINE:{line:<4}</> <c>|</> {message}"
     logger.add(
         sink="bot.log",
+        level=cfg.logging.bot_level,
         rotation="1 day",
         compression="zip",
         colorize=True,
         enqueue=True,
-        backtrace=True,
         format=logger_format,
+        backtrace=True,
+        diagnose=False,
     )
-    bot.run(cfg.bot.token, log_formatter=None)
+    bot.run(cfg.bot.token, log_handler=None)
+    logger.warning(
+        "# ---------------------------------------------------------------------------- #"
+    )
+    logger.warning(
+        "#                             BOT SHUTDOWN COMPLETE                            #"
+    )
+    logger.warning(
+        "# ---------------------------------------------------------------------------- #"
+    )
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 
 
 class DictStrTranscoder:
@@ -24,7 +24,7 @@ class DictStrTranscoder:
         string_dict: dict[str, str] = {}
 
         if not string.startswith("╳"):
-            logging.error(
+            logger.error(
                 "Decoding failure. Input string did not start with unicode character #02573 '╳'. Invalid string."
             )
             return

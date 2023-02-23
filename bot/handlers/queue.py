@@ -21,8 +21,6 @@ class QueueHandler:
 
     async def clear(self, interaction: discord.Interaction, index: int = None):
         player = await self.voice_handler.ensure_voice(interaction)
-        if not player:
-            return
 
         if not index:
             player.queue.clear()

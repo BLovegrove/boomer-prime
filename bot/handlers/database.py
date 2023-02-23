@@ -13,19 +13,25 @@ class DBHandler:
 
         self.bot = bot
 
-        self.conn = sqlite3.connect("bot.sqlite")
+        self.conn = sqlite3.connect("bot.db")
         self.cursor = self.conn.cursor()
 
     def close(self):
         self.conn.close()
 
-    def fetch_bgm(self, member_id: str):
+    def fetch_bgm(self, member_id: int):
 
-        result: str = self.cursor.execute(
-            f"SELECT track_url FROM bgm WHERE member_id='{member_id}'"
-        ).fetchone()[0]
+        qstring = f"SELECT track_url FROM bgm WHERE member_id='{member_id}'"
+        result = self.cursor.execute(qstring).fetchone()
 
-        return result
+        logger.debug(f"Result query for fetch_bgm: {qstring}")
+        logger.debug(f"Result data for fetch_bgm: {result}")
+
+        if result == [] or result == None:
+            return
+        else:
+            logger.debug(f"Returned result: {result[0]}")
+            return result[0]
 
     def fetch_bgm_all(self):
 
@@ -40,7 +46,7 @@ class DBHandler:
 
         return bgm
 
-    def __insert_bgm(self, member_id: str, track_url: str):
+    def __insert_bgm(self, member_id: int, track_url: str):
 
         self.cursor.execute(
             f"INSERT INTO bgm(member_id,track_url) VALUES('{member_id}','{track_url}')"
@@ -49,25 +55,22 @@ class DBHandler:
 
         return
 
-    def __update_bgm(self, member_id: str, track_url: str):
+    def __update_bgm(self, member_id: int, track_url: str):
 
         self.cursor.execute(
-            f"UPDATE favs SET track_url='{track_url}' WHERE member_id='{member_id}'"
+            f"UPDATE bgm SET track_url='{track_url}' WHERE member_id='{member_id}'"
         )
         self.conn.commit()
 
         return
 
-    def update_insert_bgm(self, member_id: str, track_url: str):
+    def update_insert_bgm(self, member_id: int, track_url: str):
 
-        bgm_exists = (
-            self.cursor.execute(
-                f"SELECT member_id FROM favs WHERE member_id='{member_id}'"
-            ).fetchone()
-            != []
-        )
+        result = self.cursor.execute(
+            f"SELECT member_id FROM bgm WHERE member_id='{member_id}'"
+        ).fetchone()
 
-        if bgm_exists:
+        if result:
             self.__update_bgm(member_id, track_url)
         else:
             self.__insert_bgm(member_id, track_url)

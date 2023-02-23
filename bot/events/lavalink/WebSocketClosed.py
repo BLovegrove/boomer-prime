@@ -1,5 +1,6 @@
 import lavalink
 from discord.ext import commands
+from loguru import logger
 
 from ...handlers.voice import VoiceHandler
 from ...util.models import LavaBot
@@ -12,10 +13,9 @@ class WebSocketClosed(commands.Cog):
 
     @lavalink.listener(lavalink.events.WebSocketClosedEvent)
     async def track_hook(self, event: lavalink.events.WebSocketClosedEvent):
+        logger.debug("WebSocketClosed event fired!")
 
         player: lavalink.DefaultPlayer = event.player
-        if not player:
-            return
 
         await self.voice_handler.disconnect(self.bot, player)
 
