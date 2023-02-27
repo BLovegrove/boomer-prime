@@ -165,8 +165,7 @@ class MusicHandler:
 
                 if index - 1 != 0:
                     # TODO: confirm this works how I think it does...
-                    player.queue = player.queue[: index + 1]
-                    return
+                    player.queue = player.queue[index - 1 :]
 
             else:
                 logger.info(f"Jumped to track {index} of {len(player.queue)} in queue.")

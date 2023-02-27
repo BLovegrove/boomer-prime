@@ -200,7 +200,7 @@ class ListEmbedBuilder:
             url=self.track.uri,
         )
         self.embed.set_author(
-            name=f"Current queue: Showing #{self.list_start + 1} to #{self.list_end + 1} items in queue.",
+            name=f"Current queue: Showing #{self.list_start + 1} to #{self.list_end + 1} of #{len(player.queue)} items in queue.",
             icon_url="https://i.imgur.com/dpVBIer.png",
         )
         self.embed.set_footer(text="<> for page +/-")

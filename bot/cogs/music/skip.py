@@ -17,7 +17,7 @@ class Skip(commands.Cog):
     @app_commands.describe(index="The number in the queue you want to skip to")
     async def skip(self, interaction: discord.Interaction, index: int = None):
 
-        await self.music_handler.skip(interaction, index if index != None else 1)
+        await self.music_handler.skip(interaction, index if index else 1)
 
         return
 
