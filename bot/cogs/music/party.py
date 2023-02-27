@@ -5,8 +5,8 @@ from discord.ext import commands
 
 from ...handlers.database import DBHandler
 from ...handlers.music import MusicHandler
-from ...handlers.voice import VoiceHandler
 from ...handlers.queue import QueueHandler
+from ...handlers.voice import VoiceHandler
 from ...util.models import LavaBot
 
 
@@ -26,13 +26,16 @@ class Party(commands.Cog):
 
         await interaction.response.defer()
 
-        if player.fetch("party"):
+        if player.fetch("partymode"):
             player.queue.clear()
+            player.set_loop(player.LOOP_NONE)
+            player.set_shuffle(False)
             await player.skip()
             player.store("partymode", False)
             await interaction.followup.send(
-                content=":no_entry_sign: :partying_face: :no_entry_sign: Disabled party mode and set player to idle."
+                content=":no_entry_sign: Disabled party mode and set player to idle."
             )
+            return
 
         favs_result = self.database_handler.fetch_favs(interaction.user)
 
@@ -80,7 +83,9 @@ class Party(commands.Cog):
         )
 
         if tracks_missing != []:
-            await interaction.followup.send(f"Failed to queue some of your favourites - they were probably taken down: {tracks_missing}")
+            await interaction.followup.send(
+                f"Failed to queue some of your favourites - they were probably taken down: {tracks_missing}"
+            )
 
         player.store("partymode", True)
         return
