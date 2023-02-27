@@ -20,7 +20,7 @@ class Play(commands.Cog):
         description=f"Plays music! Summons {cfg.bot.name} if they aren't running, adds a song to the queue if they are.",
     )
     @app_commands.describe(search="The name/artist/url of the song you want to find")
-    async def play(self, interaction: discord.Interaction, search: str | None):
+    async def play(self, interaction: discord.Interaction, search: str = None):
 
         if search:
             player = self.bot.lavalink.player_manager.create(interaction.guild_id)

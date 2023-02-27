@@ -1,5 +1,6 @@
 import discord
 import lavalink
+from loguru import logger
 from StringProgressBar import progressBar as ProgressBar
 
 import config as cfg
@@ -169,11 +170,13 @@ class PlaylistEmbedBuilder:
 class ListEmbedBuilder:
     def __init__(self, player: lavalink.DefaultPlayer, page: int) -> None:
 
+        logger.debug(f"List embed page number requested: {page}")
+
         self.list_start = (page - 1) * cfg.player.list_len
         self.list_end = (
             self.list_start + (cfg.player.list_len - 1)
             if page < player.fetch("pages")
-            else len(player.queue - 1)
+            else len(player.queue) - 1
         )
 
         self.track = player.current
@@ -182,7 +185,7 @@ class ListEmbedBuilder:
             ""
             + (":repeat_one: " if player.loop == player.LOOP_SINGLE else "")
             + (":repeat: " if player.loop == player.LOOP_QUEUE else "")
-            + (":shuffle: " if player.shuffle else "")
+            + (":twisted_rightwards_arrows: " if player.shuffle else "")
         )
 
         if self.modifiers == "":
@@ -208,12 +211,12 @@ class ListEmbedBuilder:
         else:
             self.embed.set_thumbnail(url="https://i.imgur.com/hpjK2ym.png")
 
-        for i, item in enumerate(range(self.list_start, self.list_end + 1)):
+        for i in range(self.list_start, self.list_end + 1):
             track = player.queue[i]
             play_time = lavalink.format_time(track.duration)
 
             title = f"{i + 1}. *{track.title}*"
-            title = title[:5] + "..." if len(title) > 5 else title
+            title = title[:50] + "...*" if len(title) > 50 else title
 
             self.embed.add_field(name=title, value=f"{play_time}", inline=False)
 

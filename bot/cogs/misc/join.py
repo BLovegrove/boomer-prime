@@ -25,7 +25,6 @@ class Join(commands.Cog):
             content=f"Joined <#{interaction.user.voice.channel.id}>"
         )
         await player.set_volume(cfg.player.volume_default)
-        player.store("summoner_id", interaction.user.id)
         await self.bot.lavalink._dispatch_event(lavalink.events.QueueEndEvent(player))
         return
 

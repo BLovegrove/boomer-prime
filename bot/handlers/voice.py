@@ -1,6 +1,5 @@
 import discord
 import lavalink
-from discord.ext import commands
 from loguru import logger
 
 import config as cfg
@@ -34,7 +33,7 @@ class VoiceHandler:
 
         # These are commands that require the bot to join a voicechannel (i.e. initiating playback).
         # Commands such as volume/skip etc don't require the bot to be in a voicechannel so don't need listing here.
-        should_connect = interaction.command.name in ("play", "join")
+        should_connect = interaction.command.name in ("play", "join", "favs", "party")
 
         if not interaction.user.voice or not interaction.user.voice.channel:
             # Our cog_command_error handler catches this and sends it to the voicechannel.
@@ -50,6 +49,7 @@ class VoiceHandler:
                     f"{cfg.bot.name} not running yet. Try /join or /play first"
                 )
 
+            player.store("summoner_id", interaction.user.id)
             await interaction.user.voice.channel.connect(cls=LavalinkVoiceClient)
         else:
             if v_client.channel.id != interaction.user.voice.channel.id:
@@ -68,4 +68,5 @@ class VoiceHandler:
         await player.set_volume(cfg.player.volume_default)
         await player.clear_filters()
         await player.destroy()
+        bot.get_guild(player.guild_id).voice_client.cleanup()
         await PresenceHandler.update_status(bot, player)

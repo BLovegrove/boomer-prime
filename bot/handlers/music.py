@@ -112,9 +112,10 @@ class MusicHandler:
     ):
         player = await self.voice_handler.ensure_voice(interaction)
 
-        if len(player.queue) == 0 and player.loop != player.LOOP_SINGLE:
+        logger.debug(f"Queue length: {len(player.queue)}, loop status: {player.loop}")
+        if len(player.queue) == 0 or player.fetch("idle"):
             await interaction.response.send_message(
-                ":notepad_spiral: End of queue - tie for your daily dose of idle tunes!"
+                ":notepad_spiral: End of queue - time for your daily dose of idle tunes!"
             )
             await player.skip()
             return
@@ -187,16 +188,17 @@ class MusicHandler:
                     logger.error(e)
 
             if not next_track:
-                await interaction.response.send_message("Error! Track not found.")
+                await interaction.response.send_message(
+                    ":warning: Error! Track not found."
+                )
                 return
 
             await player.skip()
             logger.info("Skipping current track...")
 
-            embed = SkipEmbedBuilder(interaction, next_track, player)
+            embed = SkipEmbedBuilder(interaction, player.current, player)
             await interaction.response.send_message(embed=embed.construct())
 
             self.queue_handler.update_pages(player)
-            await PresenceHandler.update_status(self.bot, player)
 
             return

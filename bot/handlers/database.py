@@ -107,7 +107,7 @@ class DBHandler:
 
         favs = DictStrTranscoder.decode(favs_data)
         if not favs:
-            return
+            return None
 
         return (favs_role, favs)
 
