@@ -24,6 +24,9 @@ class Clear(commands.Cog):
 
         else:
             player = self.voice_handler.fetch_player(self.bot)
+            if not player:
+                return
+
             if index <= 0:
                 await interaction.response.send_message(
                     ":warning: That index is too low! Queue starts at #1.",

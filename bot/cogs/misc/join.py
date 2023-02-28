@@ -18,10 +18,11 @@ class Join(commands.Cog):
         description=f"Summons {cfg.bot.name} to your voice channel and plays the summoners idle tune.",
     )
     async def join(self, interaction: discord.Interaction):
-        await interaction.response.defer()
         player = await self.voice_handler.ensure_voice(interaction)
+        if not player:
+            return
 
-        await interaction.edit_original_response(
+        await interaction.response.send_message(
             content=f"Joined <#{interaction.user.voice.channel.id}>"
         )
         await player.set_volume(cfg.player.volume_default)

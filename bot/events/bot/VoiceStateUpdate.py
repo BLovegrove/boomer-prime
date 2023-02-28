@@ -20,12 +20,6 @@ class VoiceStateUpdate(commands.Cog):
         before: discord.VoiceState,
         after: discord.VoiceState,
     ):
-
-        # player = self.voice_handler.fetch_player(self.bot)
-        # player = lavalink.
-        # if not player:
-        #     return
-
         if not before.channel or after.channel:
             return
 

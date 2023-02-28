@@ -102,7 +102,7 @@ class ProgressEmbedBuilder(TrackEmbedBuilder):
 
         # progress bar data
         self.total = player.current.duration
-        self.current = player.position
+        self.current = int(player.position)
         self.progress = ProgressBar.splitBar(
             self.total,
             self.current,

@@ -113,7 +113,7 @@ class MusicHandler:
         player = await self.voice_handler.ensure_voice(interaction)
 
         logger.debug(f"Queue length: {len(player.queue)}, loop status: {player.loop}")
-        if len(player.queue) == 0 or player.fetch("idle"):
+        if len(player.queue) == 0 and player.fetch("idle"):
             await interaction.response.send_message(
                 ":notepad_spiral: End of queue - time for your daily dose of idle tunes!"
             )
@@ -164,7 +164,6 @@ class MusicHandler:
                 )
 
                 if index - 1 != 0:
-                    # TODO: confirm this works how I think it does...
                     player.queue = player.queue[index - 1 :]
 
             else:

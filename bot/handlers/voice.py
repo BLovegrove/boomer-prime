@@ -13,12 +13,8 @@ class VoiceHandler:
         self.bot = bot
 
     def fetch_player(self, bot: LavaBot) -> lavalink.DefaultPlayer:
-        try:
-            player = bot.lavalink.player_manager.get(cfg.guild.id)
-            return player
-        except Exception:
-            logger.exception("Error while fetching player!")
-            return
+        player = bot.lavalink.player_manager.get(cfg.guild.id)
+        return player
 
     async def ensure_voice(self, interaction: discord.Interaction):
         """This check ensures that the bot and command author are in the same voicechannel."""
@@ -40,6 +36,7 @@ class VoiceHandler:
             # Exceptions allow us to "short-circuit" command invocation via checks so the
             # execution state of the command goes no further.
             await interaction.response.send_message("Join a voicechannel first")
+            return
 
         v_client = interaction.guild.voice_client
         if not v_client:
@@ -67,6 +64,6 @@ class VoiceHandler:
         player.store("track_repeat", False)
         await player.set_volume(cfg.player.volume_default)
         await player.clear_filters()
+        await bot.get_guild(player.guild_id).voice_client.disconnect()
         await player.destroy()
-        bot.get_guild(player.guild_id).voice_client.cleanup()
         await PresenceHandler.update_status(bot, player)

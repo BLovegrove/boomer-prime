@@ -1,6 +1,7 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
+from loguru import logger
 
 import config as cfg
 
@@ -23,19 +24,22 @@ class Play(commands.Cog):
     async def play(self, interaction: discord.Interaction, search: str = None):
 
         if search:
-            player = self.bot.lavalink.player_manager.create(interaction.guild_id)
+            # player = self.bot.lavalink.player_manager.create(interaction.guild_id)
             await self.music_handler.play(interaction, search)
             return
 
         player = self.voice_handler.fetch_player(self.bot)
 
-        if not player.paused:
-            await interaction.followup.send(
-                "Nothing is paused - try entering a YouTube or Soundcloud URL to play a new track instead."
+        if (player and not player.paused) or not player:
+            await interaction.response.send_message(
+                "Nothing is paused - try entering a YouTube or Soundcloud URL to play a new track instead.",
+                ephemeral=True,
             )
+            return
 
         await player.set_pause(False)
-        await interaction.followup.send("Track resumed :arrow_forward:")
+        logger.info("Player resumed")
+        await interaction.response.send_message("Track resumed :arrow_forward:")
 
         return
 
