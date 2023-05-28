@@ -2,10 +2,14 @@ import logging
 import logging.handlers
 import sys
 
-import discord
 from loguru import logger
 
-import config as cfg
+try:
+    import config as cfg
+except ImportError as e:
+    raise Exception(
+        "No config file found. Please fill in config_example.py correctly and rename to config.py"
+    ) from e
 
 from .util.models import LavaBot
 
@@ -30,6 +34,7 @@ class InterceptHandler(logging.Handler):
 
 
 logging.basicConfig(handlers=[InterceptHandler()], level="INFO", force=True)
+
 
 # make sure the main py file is being run as a file and not imported
 def main():
