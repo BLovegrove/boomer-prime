@@ -9,4 +9,4 @@ RUN python3.10 -m pip install -r /boomer/requirements.txt
 
 WORKDIR /boomer
 
-CMD ["python3.10", "./bot/__main__.py"]
+CMD ["python3.10", "bot/__main__.py"]
