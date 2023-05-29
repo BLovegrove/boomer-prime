@@ -9,4 +9,6 @@ WORKDIR /boomer
 
 RUN python3.10 -m pip install -r requirements.txt
 
+VOLUME /boomer
+
 CMD ["python3.10", "-m", "bot"]
