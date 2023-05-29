@@ -3,7 +3,7 @@ import lavalink
 from loguru import logger
 from StringProgressBar import progressBar as ProgressBar
 
-import config.config as cfg
+import config as cfg
 
 
 class TrackEmbedBuilder:

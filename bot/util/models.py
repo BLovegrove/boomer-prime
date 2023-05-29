@@ -2,7 +2,7 @@ import discord
 import lavalink
 from discord.ext import commands
 
-import config.config as cfg
+import config as cfg
 
 from . import helper
 
