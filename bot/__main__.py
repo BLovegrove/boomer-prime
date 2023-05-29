@@ -5,7 +5,7 @@ import sys
 from loguru import logger
 
 try:
-    import config as cfg
+    import config.config as cfg
 except ImportError as e:
     raise Exception(
         "No config file found. Please fill in config_example.py correctly and rename to config.py"

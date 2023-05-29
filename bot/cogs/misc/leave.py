@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-import config as cfg
+import config.config as cfg
 
 from ...handlers.music import MusicHandler
 from ...handlers.voice import VoiceHandler
