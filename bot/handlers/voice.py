@@ -2,7 +2,7 @@ import discord
 import lavalink
 from loguru import logger
 
-import config as cfg
+import config.config as cfg
 
 from ..handlers.presence import PresenceHandler
 from ..util.models import LavaBot, LavalinkVoiceClient

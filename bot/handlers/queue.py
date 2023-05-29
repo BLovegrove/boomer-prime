@@ -4,7 +4,7 @@ import discord
 import lavalink
 from discord.ext import commands
 
-import config as cfg
+import config.config as cfg
 
 from ..handlers import embeds
 from ..handlers.voice import VoiceHandler

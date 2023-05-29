@@ -4,7 +4,7 @@ import discord
 import lavalink
 from loguru import logger
 
-import config as cfg
+import config.config as cfg
 
 from ..handlers.embeds import PlaylistEmbedBuilder, SkipEmbedBuilder, TrackEmbedBuilder
 from ..handlers.presence import PresenceHandler

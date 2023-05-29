@@ -1,15 +1,11 @@
 import logging
 import logging.handlers
+import os
 import sys
 
 from loguru import logger
 
-try:
-    import config as cfg
-except ImportError as e:
-    raise Exception(
-        "No config file found. Please fill in config_example.py correctly and rename to config.py"
-    ) from e
+import config as cfg
 
 from .util.models import LavaBot
 
