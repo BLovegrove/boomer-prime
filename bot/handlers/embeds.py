@@ -3,7 +3,7 @@ import lavalink
 from loguru import logger
 from StringProgressBar import progressBar as ProgressBar
 
-import config.config as cfg
+import config as cfg
 
 
 class TrackEmbedBuilder:
@@ -169,7 +169,6 @@ class PlaylistEmbedBuilder:
 
 class ListEmbedBuilder:
     def __init__(self, player: lavalink.DefaultPlayer, page: int) -> None:
-
         logger.debug(
             f"List embed page number requested: {page}. Total pages: {player.fetch('pages')}"
         )

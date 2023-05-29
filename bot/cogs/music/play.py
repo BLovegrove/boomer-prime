@@ -3,7 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 from loguru import logger
 
-import config.config as cfg
+import config as cfg
 
 from ...handlers.music import MusicHandler
 from ...handlers.voice import VoiceHandler
@@ -22,7 +22,6 @@ class Play(commands.Cog):
     )
     @app_commands.describe(search="The name/artist/url of the song you want to find")
     async def play(self, interaction: discord.Interaction, search: str = None):
-
         if search:
             # player = self.bot.lavalink.player_manager.create(interaction.guild_id)
             await self.music_handler.play(interaction, search)

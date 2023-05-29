@@ -4,7 +4,7 @@ import discord
 import lavalink
 from loguru import logger
 
-import config.config as cfg
+import config as cfg
 
 from ..handlers.embeds import PlaylistEmbedBuilder, SkipEmbedBuilder, TrackEmbedBuilder
 from ..handlers.presence import PresenceHandler
@@ -67,7 +67,6 @@ class MusicHandler:
         result: lavalink.LoadResult = await player.node.get_tracks(f"ytsearch:{search}")
 
         try:
-
             match result.load_type:
                 case lavalink.LoadType.LOAD_FAILED:
                     await interaction.response.edit_message(

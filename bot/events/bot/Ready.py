@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from loguru import logger
 
-import config.config as cfg
+import config as cfg
 
 from ...handlers.presence import PresenceHandler
 from ...handlers.voice import VoiceHandler

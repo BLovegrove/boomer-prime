@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-import config.config as cfg
+import config as cfg
 
 from ...handlers.music import MusicHandler
 from ...handlers.voice import VoiceHandler
@@ -17,7 +17,6 @@ class Leave(commands.Cog):
 
     @app_commands.command(description="Clears the queue and leaves the call.")
     async def leave(self, interaction: discord.Interaction):
-
         player = await self.voice_handler.ensure_voice(interaction)
 
         if not player:
