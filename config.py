@@ -27,15 +27,15 @@ class lavalink:
 
 
 class player:
-    volume_default = (
+    volume_default = int(
         os.environ["PLAYER_VOLUME_DEFAULT"]
         if os.environ["PLAYER_VOLUME_DEFAULT"]
-        else 50
+        else "50"
     )
-    volume_idle = (
-        os.environ["PLAYER_VOLUME_IDLE"] if os.environ["PLAYER_VOLUME_IDLE"] else 5
+    volume_idle = int(
+        os.environ["PLAYER_VOLUME_IDLE"] if os.environ["PLAYER_VOLUME_IDLE"] else "5"
     )
-    list_len = (
-        os.environ["PLAYER_LIST_LENGTH"] if os.environ["PLAYER_LIST_LENGTH"] else 9
+    list_len = int(
+        os.environ["PLAYER_LIST_LENGTH"] if os.environ["PLAYER_LIST_LENGTH"] else "9"
     )
-    bgm_default = os.environ["PLAYER_BACKGROUND_MUSIC"]
+    bgm_default = int(os.environ["PLAYER_BACKGROUND_MUSIC"])
