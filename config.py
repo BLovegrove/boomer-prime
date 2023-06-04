@@ -38,4 +38,4 @@ class player:
     list_len = int(
         os.environ["PLAYER_LIST_LENGTH"] if os.environ["PLAYER_LIST_LENGTH"] else "9"
     )
-    bgm_default = int(os.environ["PLAYER_BACKGROUND_MUSIC"])
+    bgm_default = os.environ["PLAYER_BACKGROUND_MUSIC"]
